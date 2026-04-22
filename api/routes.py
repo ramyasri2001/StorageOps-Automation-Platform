@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from api.app import app, db
 from api.models import Volume
+import requests
 
 
 @app.route('/api/volumes', methods=['GET'])
@@ -52,10 +53,28 @@ def update_volume(volume_id):
     if 'total_capacity_gb' in data:
         volume.total_capacity_gb = data['total_capacity_gb']
     db.session.commit()
+
+    if volume.is_critical:
+        try:
+            requests.post(
+                "http://localhost:5678/webhook-test/97c45bad-ea44-4ebf-8b4f-a81b364d2472",
+                json={
+                    "volume": volume.name,
+                    "utilization": volume.utilization_pct,
+                    "status": "critical",
+                    "message": f"Volume {volume.name} is at {volume.utilization_pct}% capacity!"
+                },
+                timeout=5
+            )
+            print(f"🚨 Alert sent to n8n for {volume.name}")
+        except Exception as e:
+            print(f"Could not send to n8n: {e}")
     return jsonify({
         'message': f"Volume {volume.name} updated",
         'volume': volume.to_dict()
     })
+    
+
 
 
 @app.route('/api/volumes/<int:volume_id>', methods=['DELETE'])
