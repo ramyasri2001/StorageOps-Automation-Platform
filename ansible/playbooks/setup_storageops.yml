@@ -1,0 +1,51 @@
+---
+- name: StorageOps Server Setup
+  hosts: storageops_servers
+  become: false
+
+  vars:
+    storageops_dir: "{{ ansible_env.HOME }}/storageops"
+    app_port: 8080
+
+  tasks:
+    - name: Print setup message
+      debug:
+        msg: "Setting up StorageOps on {{ inventory_hostname }}"
+
+    - name: Create StorageOps directory
+      file:
+        path: "{{ storageops_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Check Python version
+      command: python3 --version
+      register: python_version
+
+    - name: Display Python version
+      debug:
+        msg: "Python version: {{ python_version.stdout }}"
+
+    - name: Check if Flask is installed
+      command: pip3 show flask
+      register: flask_check
+      ignore_errors: true
+
+    - name: Display Flask status
+      debug:
+        msg: "Flask installed: {{ 'Yes' if flask_check.rc == 0 else 'No' }}"
+
+    - name: Create StorageOps config file
+      copy:
+        content: |
+          # StorageOps Configuration
+          APP_PORT={{ app_port }}
+          DB_PATH={{ storageops_dir }}/storageops.db
+          ALERT_THRESHOLD=90
+          N8N_WEBHOOK=http://localhost:5678/webhook/storageops
+        dest: "{{ storageops_dir }}/config.env"
+      ignore_errors: true
+
+    - name: Verify setup complete
+      debug:
+        msg: "StorageOps setup complete on {{ inventory_hostname }}!"
