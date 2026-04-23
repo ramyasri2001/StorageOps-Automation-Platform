@@ -1,6 +1,6 @@
 # StorageOps Automation Platform
 
-A production-grade storage operations automation platform built with Python, Flask, and SQLAlchemy — inspired by enterprise storage engineering workflows at companies like ICE (Intercontinental Exchange).
+A production-grade storage operations automation platform built with Python, Flask, and SQLAlchemy — inspired by enterprise storage engineering workflows.
 
 ---
 
@@ -35,6 +35,13 @@ pytest Tests         →    GitHub Actions CI/CD
 | SQLAlchemy | Database ORM |
 | SQLite | Data persistence |
 | pytest | Automated testing |
+| Ansible | Configuration management |
+| Docker | Containerization |
+| Docker Compose | Multi-service orchestration |
+| Prometheus | Metrics collection |
+| Grafana | Metrics visualization |
+| n8n | Workflow automation |
+| GitHub Actions | CI/CD pipeline |
 | Git/GitHub | Version control |
 
 ---
@@ -121,9 +128,9 @@ tests/test_api.py::test_duplicate_volume_rejected PASSED
 ## 📅 Roadmap
 
 - [x] Week 1 — Python REST API + Storage Simulator + pytest
-- [ ] Week 2 — Ansible playbooks + n8n workflows
-- [ ] Week 3 — Docker containerization + Grafana dashboard
-- [ ] Week 4 — LangChain AI integration + GitHub Actions CI/CD
+- [x] Week 2 — Ansible playbooks + n8n workflows
+- [x] Week 3 — Docker containerization + Grafana dashboard
+- [x] Week 4 — GitHub Actions CI/CD pipeline
 
 ---
 
